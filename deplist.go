@@ -8,6 +8,10 @@ import (
 	"os"
 )
 
+var (
+	testImports = flag.Bool("t", false, "Include test dependencies")
+)
+
 func usage(status int) {
 	fmt.Printf(`Usage:
 	%s [PKG]
@@ -49,7 +53,6 @@ func findDeps(soFar map[string]bool, name string, testImports bool) error {
 }
 
 func main() {
-	testImports := flag.Bool("t", false, "Include test dependencies")
 	flag.Parse()
 
 	pkg := "."
