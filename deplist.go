@@ -12,6 +12,7 @@ import (
 var (
 	testImports = flag.Bool("t", false, "Include test dependencies")
 	prefix      = flag.String("p", "", "Include only packages which match this prefix.")
+	oneline     = flag.Bool("oneline", false, "List all packages as comma-separated list on one line.")
 
 	ignored = map[string]bool{
 		"C": true,
@@ -82,7 +83,15 @@ func main() {
 		log.Fatalln(err)
 	}
 	delete(deps, pkg)
-	for dep := range deps {
-		fmt.Println(dep)
+	if *oneline {
+		keys := make([]string, 0, len(deps))
+		for k := range deps {
+			keys = append(keys, k)
+		}
+		fmt.Println(strings.Join(keys, ","))
+	} else {
+		for dep := range deps {
+			fmt.Println(dep)
+		}
 	}
 }
