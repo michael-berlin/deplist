@@ -36,6 +36,7 @@ func findDeps(soFar map[string]bool, name string, testImports bool) error {
 	imports := pkg.Imports
 	if testImports {
 		imports = append(imports, pkg.TestImports...)
+		testImports = false
 	}
 	for _, imp := range imports {
 		if !soFar[imp] {
