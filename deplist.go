@@ -10,6 +10,10 @@ import (
 
 var (
 	testImports = flag.Bool("t", false, "Include test dependencies")
+
+	ignored = map[string]bool{
+		"C": true,
+	}
 )
 
 func usage(status int) {
@@ -43,10 +47,14 @@ func findDeps(soFar map[string]bool, name string, testImports bool) error {
 		testImports = false
 	}
 	for _, imp := range imports {
-		if !soFar[imp] {
-			if err := findDeps(soFar, imp, testImports); err != nil {
-				return err
-			}
+		if soFar[imp] {
+			continue
+		}
+		if _, ok := ignored[imp]; ok {
+			continue
+		}
+		if err := findDeps(soFar, imp, testImports); err != nil {
+			return err
 		}
 	}
 	return nil
