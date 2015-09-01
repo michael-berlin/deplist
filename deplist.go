@@ -12,6 +12,7 @@ import (
 var (
 	testImports = flag.Bool("t", false, "Include test dependencies")
 	prefix      = flag.String("p", "", "Include only packages which match this prefix.")
+	include     = flag.Bool("include_input_pkg", false, "Include the package, which was given on the command line, as well.")
 	oneline     = flag.Bool("oneline", false, "List all packages as comma-separated list on one line.")
 
 	ignored = map[string]bool{
@@ -82,7 +83,9 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	delete(deps, pkg)
+	if !*include {
+		delete(deps, pkg)
+	}
 	if *oneline {
 		keys := make([]string, 0, len(deps))
 		for k := range deps {
