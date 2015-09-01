@@ -12,7 +12,7 @@ import (
 var (
 	testImports = flag.Bool("t", false, "Include test dependencies")
 	prefix      = flag.String("p", "", "Include only packages which match this prefix.")
-	include     = flag.Bool("include_input_pkg", false, "Include the package, which was given on the command line, as well.")
+	include     = flag.Bool("include_input_pkg", false, "Include PKG in output.")
 	oneline     = flag.Bool("oneline", false, "List all packages as comma-separated list on one line.")
 
 	ignored = map[string]bool{
@@ -25,7 +25,10 @@ func usage(status int) {
 	%s [PKG]
 where PKG is the name of a Go package (e.g., github.com/cespare/deplist). If no
 package name is given, the current directory is used.
+
+Optional Flags:
 `, os.Args[0])
+	flag.PrintDefaults()
 	os.Exit(status)
 }
 
