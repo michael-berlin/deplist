@@ -6,10 +6,12 @@ import (
 	"go/build"
 	"log"
 	"os"
+	"strings"
 )
 
 var (
 	testImports = flag.Bool("t", false, "Include test dependencies")
+	prefix      = flag.String("p", "", "Include only packages which match this prefix.")
 
 	ignored = map[string]bool{
 		"C": true,
@@ -51,6 +53,9 @@ func findDeps(soFar map[string]bool, name string, testImports bool) error {
 			continue
 		}
 		if _, ok := ignored[imp]; ok {
+			continue
+		}
+		if *prefix != "" && !strings.HasPrefix(imp, *prefix) {
 			continue
 		}
 		if err := findDeps(soFar, imp, testImports); err != nil {
